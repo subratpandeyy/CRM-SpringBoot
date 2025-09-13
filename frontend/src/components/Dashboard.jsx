@@ -14,18 +14,18 @@ import {
   DollarSign,
   Hand
 } from 'lucide-react';
-// import { 
-//   BarChart, 
-//   Bar, 
-//   XAxis, 
-//   YAxis, 
-//   CartesianGrid, 
-//   Tooltip, 
-//   ResponsiveContainer, 
-//   PieChart, 
-//   Pie, 
-//   Cell 
-// } from 'recharts';
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer, 
+  PieChart, 
+  Pie, 
+  Cell 
+} from 'recharts';
 import api from '../services/api.js';
 
 function Dashboard() {
@@ -235,11 +235,17 @@ function Dashboard() {
             <p className="card-description">Monthly performance metrics</p>
           </div>
           <div className="card-content">
-            <div className="h-80 flex items-center justify-center">
-              <div className="text-center text-gray-500">
-                <p>Chart temporarily disabled</p>
-                <p className="text-sm">Leads & Deals data will be displayed here</p>
-              </div>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="leads" fill="#3b82f6" name="Leads" />
+                  <Bar dataKey="deals" fill="#10b981" name="Deals" />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>
         </motion.div>
@@ -256,11 +262,25 @@ function Dashboard() {
             <p className="card-description">Current deal distribution</p>
           </div>
           <div className="card-content">
-            <div className="h-80 flex items-center justify-center">
-              <div className="text-center text-gray-500">
-                <p>Chart temporarily disabled</p>
-                <p className="text-sm">Deal stages data will be displayed here</p>
-              </div>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={100}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
             </div>
             <div className="grid grid-cols-2 gap-4 mt-4">
               {pieData.map((item, index) => (

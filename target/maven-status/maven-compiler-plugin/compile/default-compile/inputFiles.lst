@@ -1,5 +1,6 @@
 D:\CRM Test\src\main\java\com\crm\security\JwtAuthenticationEntryPoint.java
 D:\CRM Test\src\main\java\com\crm\controller\AccountController.java
+D:\CRM Test\src\main\java\com\crm\dto\DealDto.java
 D:\CRM Test\src\main\java\com\crm\config\JacksonConfig.java
 D:\CRM Test\src\main\java\com\crm\MultiTenantCrmApplication.java
 D:\CRM Test\src\main\java\com\crm\repository\RoleRepository.java
@@ -7,6 +8,8 @@ D:\CRM Test\src\main\java\com\crm\service\SimpleAuthService.java
 D:\CRM Test\src\main\java\com\crm\dto\MemberDto.java
 D:\CRM Test\src\main\java\com\crm\dto\OrganizationDto.java
 D:\CRM Test\src\main\java\com\crm\entity\Account.java
+D:\CRM Test\src\main\java\com\crm\service\ActivityService.java
+D:\CRM Test\src\main\java\com\crm\dto\ActivityDto.java
 D:\CRM Test\src\main\java\com\crm\entity\Contact.java
 D:\CRM Test\src\main\java\com\crm\service\OrganizationService.java
 D:\CRM Test\src\main\java\com\crm\entity\Member.java
@@ -22,8 +25,10 @@ D:\CRM Test\src\main\java\com\crm\entity\Lead.java
 D:\CRM Test\src\main\java\com\crm\repository\LeadRepository.java
 D:\CRM Test\src\main\java\com\crm\repository\OrganizationRepository.java
 D:\CRM Test\src\main\java\com\crm\repository\ContactRepository.java
+D:\CRM Test\src\main\java\com\crm\dto\AccountDto.java
 D:\CRM Test\src\main\java\com\crm\controller\ContactController.java
 D:\CRM Test\src\main\java\com\crm\repository\AccountRepository.java
+D:\CRM Test\src\main\java\com\crm\service\DealService.java
 D:\CRM Test\src\main\java\com\crm\entity\Organization.java
 D:\CRM Test\src\main\java\com\crm\repository\DealRepository.java
 D:\CRM Test\src\main\java\com\crm\dto\ContactDto.java
@@ -39,4 +44,5 @@ D:\CRM Test\src\main\java\com\crm\repository\MemberRepository.java
 D:\CRM Test\src\main\java\com\crm\security\JwtAuthenticationFilter.java
 D:\CRM Test\src\main\java\com\crm\dto\JwtResponse.java
 D:\CRM Test\src\main\java\com\crm\service\LeadService.java
+D:\CRM Test\src\main\java\com\crm\service\AccountService.java
 D:\CRM Test\src\main\java\com\crm\dto\UserResponseDto.java

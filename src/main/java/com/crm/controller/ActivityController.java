@@ -1,10 +1,13 @@
 package com.crm.controller;
 
+import com.crm.dto.ActivityDto;
+import com.crm.service.ActivityService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -12,14 +15,68 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class ActivityController {
     
+    @Autowired
+    private ActivityService activityService;
+    
+    @PostMapping
+    public ResponseEntity<?> createActivity(@Valid @RequestBody ActivityDto activityDto, Authentication authentication) {
+        try {
+            Long orgId = getOrgIdFromAuthentication(authentication);
+            activityDto.setOrgId(orgId);
+            
+            ActivityDto createdActivity = activityService.createActivity(activityDto);
+            return ResponseEntity.ok(createdActivity);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+    
     @GetMapping
     public ResponseEntity<?> getActivitiesByOrganization(Authentication authentication) {
         try {
-            // Return empty list for now
-            List<Object> activities = new ArrayList<>();
+            Long orgId = getOrgIdFromAuthentication(authentication);
+            List<ActivityDto> activities = activityService.getActivitiesByOrganization(orgId);
             return ResponseEntity.ok(activities);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
+    }
+    
+    @GetMapping("/{activityId}")
+    public ResponseEntity<?> getActivityById(@PathVariable Long activityId) {
+        try {
+            ActivityDto activity = activityService.getActivityById(activityId);
+            return ResponseEntity.ok(activity);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+    
+    @PutMapping("/{activityId}")
+    public ResponseEntity<?> updateActivity(@PathVariable Long activityId, @Valid @RequestBody ActivityDto activityDto) {
+        try {
+            ActivityDto updatedActivity = activityService.updateActivity(activityId, activityDto);
+            return ResponseEntity.ok(updatedActivity);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+    
+    @DeleteMapping("/{activityId}")
+    public ResponseEntity<?> deleteActivity(@PathVariable Long activityId) {
+        try {
+            activityService.deleteActivity(activityId);
+            return ResponseEntity.ok("Activity deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+    
+    private Long getOrgIdFromAuthentication(Authentication authentication) {
+        // Extract orgId from JWT token claims
+        if (authentication != null && authentication.getPrincipal() instanceof org.springframework.security.core.userdetails.UserDetails) {
+            return 1L; // Default orgId for now
+        }
+        return 1L; // Default fallback
     }
 }
