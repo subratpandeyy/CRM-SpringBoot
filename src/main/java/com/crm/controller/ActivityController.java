@@ -34,7 +34,7 @@ public class ActivityController {
             activityDto.setMemberId(memberId);
             
             ActivityDto createdActivity = activityService.createActivity(activityDto);
-            return ResponseEntity.ok(createdActivity);
+            return ResponseEntity.status(201).body(createdActivity);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }

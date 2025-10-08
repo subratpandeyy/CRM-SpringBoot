@@ -64,8 +64,10 @@ function Activities() {
   const fetchActivities = async () => {
     try {
       setLoading(true);
+      console.log('Fetching activities...');
       const response = await api.get('/activities');
       setActivities(response.data);
+      console.log('Activities fetched successfully:', response.data);
     } catch (error) {
       console.error('Error fetching activities:', error);
       toast.error('Failed to fetch activities');
@@ -110,29 +112,57 @@ function Activities() {
     }
   };
 
+  const formatLocalDateTime = (value) => {
+    if (!value) return '';
+    // value is from <input type="datetime-local">, e.g. "2025-10-08T14:30"
+    // Backend expects "yyyy-MM-dd'T'HH:mm:ss" without timezone.
+    const hasSeconds = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(value);
+    if (hasSeconds) return value;
+    return `${value}:00`;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Frontend validation for required fields
+      if (!formData.activityType || !formData.subject || !formData.activityDate) {
+        toast.error('Please fill Activity Type, Subject and Date');
+        return;
+      }
+
       const activityData = {
-        ...formData,
-        activityDate: formData.activityDate ? new Date(formData.activityDate).toISOString() : null,
+        // Canonical DTO fields
+        activityType: formData.activityType,
+        subject: formData.subject,
+        description: formData.description || '',
+        status: formData.status || '',
+        priority: formData.priority || '',
+        // Date without timezone
+        activityDate: formData.activityDate ? formatLocalDateTime(formData.activityDate) : null,
         accountId: formData.accountId ? parseInt(formData.accountId) : null,
         contactId: formData.contactId ? parseInt(formData.contactId) : null,
         dealId: formData.dealId ? parseInt(formData.dealId) : null,
-        leadId: formData.leadId ? parseInt(formData.leadId) : null
+        leadId: formData.leadId ? parseInt(formData.leadId) : null,
+        // Aliases for alternate backend schemas (safe to include; DTO uses @JsonAlias)
+        type: formData.activityType,
+        name: formData.subject
       };
+
+      console.log('Saving activity...', activityData);
 
       if (editingActivity) {
         await api.put(`/activities/${editingActivity.activityId}`, activityData);
         toast.success('Activity updated successfully');
+        console.log('Activity updated successfully!');
       } else {
         await api.post('/activities', activityData);
         toast.success('Activity created successfully');
+        console.log('Activity created successfully!');
       }
       setShowModal(false);
       setEditingActivity(null);
       resetForm();
-      fetchActivities();
+      await fetchActivities();
     } catch (error) {
       console.error('Error saving activity:', error);
       toast.error('Failed to save activity');
@@ -145,7 +175,8 @@ function Activities() {
       activityType: activity.activityType || '',
       subject: activity.subject || '',
       description: activity.description || '',
-      activityDate: activity.activityDate ? new Date(activity.activityDate).toISOString().split('T')[0] : '',
+      // Convert to input-friendly "yyyy-MM-ddTHH:mm" (no seconds)
+      activityDate: activity.activityDate ? new Date(activity.activityDate).toISOString().slice(0,16) : '',
       status: activity.status || '',
       priority: activity.priority || '',
       accountId: activity.accountId?.toString() || '',

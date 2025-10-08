@@ -1,5 +1,6 @@
 package com.crm.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,17 +14,21 @@ public class ActivityDto {
     
     @NotBlank(message = "Activity type is required")
     @Size(max = 50, message = "Activity type must not exceed 50 characters")
+    // Accept either "activityType" (frontend v1) or "type" (alt schema)
+    @JsonAlias({"type", "activityType"})
     private String activityType;
     
     @NotBlank(message = "Activity subject is required")
     @Size(max = 200, message = "Activity subject must not exceed 200 characters")
+    // Accept either "subject" (frontend v1) or "name" (alt schema)
+    @JsonAlias({"name", "subject"})
     private String subject;
     
     @Size(max = 1000, message = "Description must not exceed 1000 characters")
     private String description;
     
     @NotNull(message = "Activity date is required")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
+    // Rely on Spring Boot's default ISO_LOCAL_DATE_TIME parsing for LocalDateTime
     private LocalDateTime activityDate;
     
     @Size(max = 50, message = "Status must not exceed 50 characters")
@@ -32,7 +37,8 @@ public class ActivityDto {
     @Size(max = 50, message = "Priority must not exceed 50 characters")
     private String priority;
     
-    @NotNull(message = "Organization ID is required")
+    // Removed @NotNull: controller populates orgId from JWT after validation would have run.
+    // Validation that orgId is present is enforced in service instead to avoid 400 on create/update.
     private Long orgId;
     
     private Long memberId;

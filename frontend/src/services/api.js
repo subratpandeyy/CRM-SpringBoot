@@ -51,9 +51,16 @@ api.interceptors.response.use(
   },
   (error) => {
     // Log error responses for debugging with backend message
-    const backendMessage = typeof error.response?.data === 'string'
-      ? error.response.data
-      : (error.response?.data?.message || error.response?.data?.error || JSON.stringify(error.response?.data));
+    let backendMessage;
+    if (typeof error.response?.data === 'string') {
+      backendMessage = error.response.data;
+    } else if (error.response?.data?.detail) {
+      backendMessage = error.response.data.detail;
+    } else if (error.response?.data?.title || error.response?.data?.message) {
+      backendMessage = `${error.response?.data?.title || 'Error'}: ${error.response?.data?.message || ''}`.trim();
+    } else {
+      backendMessage = JSON.stringify(error.response?.data);
+    }
 
     console.error('API Response Error:', {
       status: error.response?.status,

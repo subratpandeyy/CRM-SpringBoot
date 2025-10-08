@@ -15,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -99,6 +102,33 @@ public class DealService {
             throw new RuntimeException("Deal not found");
         }
         return convertToDto(deal);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Map<String, Object>> getMonthlySummary() {
+        List<Object[]> rows = dealRepository.findMonthlyDealSummary();
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Object[] r : rows) {
+            Map<String, Object> row = new HashMap<>();
+            row.put("year", ((Number) r[0]).intValue());
+            row.put("month", ((Number) r[1]).intValue());
+            row.put("dealCount", ((Number) r[2]).intValue());
+            result.add(row);
+        }
+        return result;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Map<String, Object>> getStageDistribution() {
+        List<Object[]> rows = dealRepository.findDealStageDistribution();
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Object[] r : rows) {
+            Map<String, Object> row = new HashMap<>();
+            row.put("stage", r[0]);
+            row.put("count", ((Number) r[1]).intValue());
+            result.add(row);
+        }
+        return result;
     }
     
     public DealDto updateDeal(Long dealId, DealDto dealDto) {

@@ -11,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/deals")
@@ -46,6 +48,24 @@ public class DealController {
             Long orgId = authenticationUtils.getOrgIdFromAuthentication(authentication, request);
             List<DealDto> deals = dealService.getDealsByOrganization(orgId);
             return ResponseEntity.ok(deals);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/summary")
+    public ResponseEntity<?> getDealSummary() {
+        try {
+            return ResponseEntity.ok(dealService.getMonthlySummary());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/stages")
+    public ResponseEntity<?> getDealStageDistribution() {
+        try {
+            return ResponseEntity.ok(dealService.getStageDistribution());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }

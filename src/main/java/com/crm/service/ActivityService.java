@@ -15,6 +15,8 @@ import com.crm.repository.AccountRepository;
 import com.crm.repository.ContactRepository;
 import com.crm.repository.DealRepository;
 import com.crm.repository.LeadRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class ActivityService {
+    private static final Logger log = LoggerFactory.getLogger(ActivityService.class);
     
     @Autowired
     private ActivityRepository activityRepository;
@@ -101,6 +104,7 @@ public class ActivityService {
         activity.setLead(lead);
         
         Activity savedActivity = activityRepository.save(activity);
+        log.info("Activity saved successfully with ID: {}", savedActivity.getActivityId());
         return convertToDto(savedActivity);
     }
     

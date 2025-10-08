@@ -103,7 +103,7 @@ const CRMLandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-gray-900">CRMPro</h1>
+              <h1 className="text-2xl font-bold text-gray-900">CruxCRM</h1>
             </div>
 
             <div className="hidden md:block">
@@ -255,7 +255,7 @@ const CRMLandingPage = () => {
                   <YAxis label={{ value: 'Minutes', angle: -90, position: 'insideLeft' }} />
                   <Tooltip />
                   <Bar dataKey="manual" fill="#EF4444" name="Manual Process" />
-                  <Bar dataKey="automated" fill="#10B981" name="With CRMPro" />
+                  <Bar dataKey="automated" fill="#10B981" name="With CruxCRM" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -308,8 +308,8 @@ const CRMLandingPage = () => {
                     <XAxis dataKey="month" />
                     <YAxis tickFormatter={(value) => `$${value/1000}k`} />
                     <Tooltip formatter={(value) => [`$${value.toLocaleString()}`, '']} />
-                    <Line type="monotone" dataKey="before" stroke="#EF4444" strokeWidth={3} name="Before CRMPro" />
-                    <Line type="monotone" dataKey="after" stroke="#10B981" strokeWidth={3} name="After CRMPro" />
+                    <Line type="monotone" dataKey="before" stroke="#EF4444" strokeWidth={3} name="Before CruxCRM" />
+                    <Line type="monotone" dataKey="after" stroke="#10B981" strokeWidth={3} name="After CruxCRM" />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -416,7 +416,7 @@ const CRMLandingPage = () => {
             Ready to 10x Your Revenue?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Join 10,000+ companies growing with CRMPro
+            Join 10,000+ companies growing with CruxCRM
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-50 transform hover:scale-105 transition-all duration-200 shadow-lg flex items-center">
@@ -435,7 +435,7 @@ const CRMLandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-2xl font-bold mb-4">CRMPro</h3>
+              <h3 className="text-2xl font-bold mb-4">CruxCRM</h3>
               <p className="text-gray-400">The CRM that grows revenue.</p>
             </div>
             <div>
@@ -464,7 +464,7 @@ const CRMLandingPage = () => {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 CRMPro. All rights reserved.</p>
+            <p>&copy; 2025 CruxCRM. All rights reserved.</p>
           </div>
         </div>
       </footer>
