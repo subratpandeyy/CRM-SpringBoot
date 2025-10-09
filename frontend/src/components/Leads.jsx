@@ -143,7 +143,7 @@ function Leads() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setShowModal(true)}
-          className="btn btn-primary btn-lg mt-4 sm:mt-0"
+          className="btn btn-primary mt-4 sm:mt-0"
         >
           <Plus className="h-5 w-5 mr-2" />
           Add New Lead

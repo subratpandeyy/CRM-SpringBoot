@@ -211,7 +211,7 @@ function Deals() {
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="btn btn-primary btn-lg hover:scale-105 transition-all duration-200"
+          className="btn btn-primary hover:scale-105 transition-all duration-200"
         >
           <Plus className="h-4 w-4 mr-2" />
           Add Deal
