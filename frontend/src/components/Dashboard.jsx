@@ -31,6 +31,8 @@ import toast from 'react-hot-toast';
 
 function Dashboard() {
   const { user } = useAuth();
+  const role = user?.role;
+
   const [stats, setStats] = useState({
     totalLeads: 0,
     totalContacts: 0,
@@ -46,6 +48,9 @@ function Dashboard() {
   const [chartData, setChartData] = useState([]);
   const [pieData, setPieData] = useState([]);
 
+  // Track role-based access check against backend RBAC endpoints
+  const [roleAccess, setRoleAccess] = useState({ status: null, message: '', authorities: [] });
+
   const [showLeadModal, setShowLeadModal] = useState(false);
   const [showDealModal, setShowDealModal] = useState(false);
   const [showActivityModal, setShowActivityModal] = useState(false);
@@ -55,8 +60,48 @@ function Dashboard() {
   const [activityForm, setActivityForm] = useState({ activityType: '', subject: '', description: '', activityDate: '' });
 
   useEffect(() => {
+    // Only fetch CRM stats for internal roles; customer Users get a lightweight dashboard
+    if (!user || role === 'User') {
+      setLoading(false);
+      return;
+    }
     fetchStats();
-  }, []);
+  }, [user, role]);
+
+  // On load (and when user changes), verify role-based access using backend endpoints
+  useEffect(() => {
+    const checkRoleAccess = async () => {
+      if (!user || !user.role) return;
+
+      let endpoint = null;
+      if (user.role === 'Manager') {
+        endpoint = '/access/manager';
+      } else if (user.role === 'Sales Rep') {
+        endpoint = '/access/sales-rep';
+      } else {
+        // For Admin/User we don't have dedicated endpoints; skip check
+        setRoleAccess({ status: null, message: '', authorities: [] });
+        return;
+      }
+
+      try {
+        const response = await api.get(endpoint);
+        setRoleAccess({
+          status: 'ok',
+          message: response.data?.message || 'Access check succeeded',
+          authorities: response.data?.authorities || []
+        });
+      } catch (error) {
+        const status = error.response?.status;
+        const msg = status === 403
+          ? 'You are not allowed to access this endpoint (403 Forbidden).'
+          : (error.userMessage || 'Failed to verify role access');
+        setRoleAccess({ status: 'error', message: msg, authorities: [] });
+      }
+    };
+
+    checkRoleAccess();
+  }, [user]);
 
   const fetchStats = async () => {
     try {
@@ -258,6 +303,52 @@ function Dashboard() {
     }
   ];
 
+  // Customer (User) dashboard: simple, self-service view
+  if (role === 'User') {
+    return (
+      <div className="space-y-6">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white rounded-2xl p-8 shadow-xl border border-gray-200"
+        >
+          <h1 className="text-3xl font-bold text-text mb-2">
+            Welcome, {user?.name || 'Customer'}
+          </h1>
+          <p className="text-gray-600">
+            Here you can manage your profile and track your requests.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="card">
+            <div className="card-content">
+              <h2 className="text-xl font-semibold text-text mb-2">My Profile</h2>
+              <p className="text-gray-600 mb-4">
+                View and update your personal information.
+              </p>
+              <button className="btn btn-primary btn-sm" disabled>
+                Manage Profile (coming soon)
+              </button>
+            </div>
+          </div>
+
+          <div className="card">
+            <div className="card-content">
+              <h2 className="text-xl font-semibold text-text mb-2">Support Requests</h2>
+              <p className="text-gray-600 mb-4">
+                Check the status of your tickets or submit a new request.
+              </p>
+              <button className="btn btn-primary btn-sm" disabled>
+                View Requests (coming soon)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -265,6 +356,11 @@ function Dashboard() {
       </div>
     );
   }
+
+  // Manager/Admin and Sales Rep dashboards share the same data fetch,
+  // but we can tweak messaging and emphasis by role
+  const isManagerOrAdmin = role === 'Admin' || role === 'Manager';
+  const isSalesRep = role === 'Sales Rep';
 
   return (
     <div className="space-y-6">
@@ -277,10 +373,14 @@ function Dashboard() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold mb-2 text-[#000]">
-              Welcome back, {user?.name}!
+              {isManagerOrAdmin
+                ? `Welcome back, ${user?.name || ''}`
+                : `Your sales cockpit, ${user?.name || ''}`}
             </h1>
             <p className="text-primary-600 text-lg">
-              Here's what's happening with your CRM today
+              {isManagerOrAdmin
+                ? "Here's what's happening across your organization"
+                : "Track your pipeline and activities in one place"}
             </p>
           </div>
           <div className="hidden md:block">
@@ -339,6 +439,31 @@ function Dashboard() {
           );
         })}
       </motion.div>
+
+      {/* Role Access Status (Manager / Sales Rep) */}
+      {(user?.role === 'Manager' || user?.role === 'Sales Rep') && roleAccess.status && (
+        <div className="card border border-gray-200 bg-white">
+          <div className="card-content flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <p className="text-sm font-medium text-gray-600">
+                {user.role} backend access check
+              </p>
+              <p
+                className={`text-sm mt-1 ${
+                  roleAccess.status === 'ok' ? 'text-green-700' : 'text-red-700'
+                }`}
+              >
+                {roleAccess.message}
+              </p>
+            </div>
+            {roleAccess.authorities?.length > 0 && (
+              <div className="text-xs text-gray-500">
+                Authorities: {roleAccess.authorities.join(', ')}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

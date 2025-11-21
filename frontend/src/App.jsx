@@ -29,6 +29,28 @@ function ProtectedRoute({ children }) {
   return user ? children : <Navigate to="/home" />;
 }
 
+function AdminRoute({ children }) {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="spinner spinner-lg" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/home" />;
+  }
+
+  if (user.role !== 'Admin') {
+    return <Navigate to="/" />;
+  }
+
+  return children;
+}
+
 // Create router with future flags to suppress warnings
 const router = createBrowserRouter([
   {
@@ -106,21 +128,21 @@ const router = createBrowserRouter([
   {
     path: "/members",
     element: (
-      <ProtectedRoute>
+      <AdminRoute>
         <Layout>
           <Members />
         </Layout>
-      </ProtectedRoute>
+      </AdminRoute>
     )
   },
   {
     path: "/organizations",
     element: (
-      <ProtectedRoute>
+      <AdminRoute>
         <Layout>
           <Organizations />
         </Layout>
-      </ProtectedRoute>
+      </AdminRoute>
     )
   }
 ], {

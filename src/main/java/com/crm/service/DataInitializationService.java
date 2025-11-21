@@ -60,26 +60,49 @@ public class DataInitializationService implements CommandLineRunner {
             System.out.println("Test organization created successfully");
         }
         
-        // Create test user if it doesn't exist
+        // Create test users if none exist
         if (memberRepository.count() == 0) {
-            // Get the first organization and admin role
+            // Get the first organization and roles
             Organization testOrg = organizationRepository.findAll().get(0);
             Role adminRole = roleRepository.findByRoleName("Admin").orElse(null);
+            Role managerRole = roleRepository.findByRoleName("Manager").orElse(null);
+            Role salesRepRole = roleRepository.findByRoleName("Sales Rep").orElse(null);
             
-            if (testOrg != null && adminRole != null) {
-                Member testUser = new Member();
-                testUser.setName("Test Admin");
-                testUser.setEmail("admin@test.com");
-                testUser.setPassword(passwordEncoder.encode("password123"));
-                testUser.setStatus(Member.MemberStatus.ACTIVE);
-                testUser.setOrganization(testOrg);
-                testUser.setRole(adminRole);
+            if (testOrg != null && adminRole != null && managerRole != null && salesRepRole != null) {
+                // Admin user
+                Member adminUser = new Member();
+                adminUser.setName("Test Admin");
+                adminUser.setEmail("admin@test.com");
+                adminUser.setPassword(passwordEncoder.encode("password123"));
+                adminUser.setStatus(Member.MemberStatus.ACTIVE);
+                adminUser.setOrganization(testOrg);
+                adminUser.setRole(adminRole);
+                memberRepository.save(adminUser);
                 
-                memberRepository.save(testUser);
+                // Manager user
+                Member managerUser = new Member();
+                managerUser.setName("Test Manager");
+                managerUser.setEmail("manager@test.com");
+                managerUser.setPassword(passwordEncoder.encode("password123"));
+                managerUser.setStatus(Member.MemberStatus.ACTIVE);
+                managerUser.setOrganization(testOrg);
+                managerUser.setRole(managerRole);
+                memberRepository.save(managerUser);
                 
-                System.out.println("Test user created successfully:");
-                System.out.println("Email: admin@test.com");
-                System.out.println("Password: password123");
+                // Sales Rep user
+                Member salesRepUser = new Member();
+                salesRepUser.setName("Test Sales Rep");
+                salesRepUser.setEmail("sales@test.com");
+                salesRepUser.setPassword(passwordEncoder.encode("password123"));
+                salesRepUser.setStatus(Member.MemberStatus.ACTIVE);
+                salesRepUser.setOrganization(testOrg);
+                salesRepUser.setRole(salesRepRole);
+                memberRepository.save(salesRepUser);
+                
+                System.out.println("Test users created successfully:");
+                System.out.println("Admin   -> Email: admin@test.com  Password: password123");
+                System.out.println("Manager -> Email: manager@test.com Password: password123");
+                System.out.println("Sales   -> Email: sales@test.com   Password: password123");
             }
         }
     }

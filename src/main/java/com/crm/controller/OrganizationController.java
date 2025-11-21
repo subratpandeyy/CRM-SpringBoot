@@ -2,20 +2,29 @@ package com.crm.controller;
 
 import com.crm.dto.OrganizationDto;
 import com.crm.service.OrganizationService;
+import com.crm.util.AuthenticationUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/organizations")
 @CrossOrigin(origins = "*")
+@PreAuthorize("hasRole('Admin')")
 public class OrganizationController {
     
     @Autowired
     private OrganizationService organizationService;
+
+    @Autowired
+    private AuthenticationUtils authenticationUtils;
     
     @PostMapping
     public ResponseEntity<?> createOrganization(@Valid @RequestBody OrganizationDto organizationDto) {
@@ -28,10 +37,12 @@ public class OrganizationController {
     }
     
     @GetMapping
-    public ResponseEntity<?> getAllOrganizations() {
+    public ResponseEntity<?> getOrganizationsForCurrentTenant(Authentication authentication, HttpServletRequest request) {
         try {
-            List<OrganizationDto> organizations = organizationService.getAllOrganizations();
-            return ResponseEntity.ok(organizations);
+            Long orgId = authenticationUtils.getOrgIdFromAuthentication(authentication, request);
+            OrganizationDto organization = organizationService.getOrganizationById(orgId);
+            // Frontend expects a list, so return a single-element list
+            return ResponseEntity.ok(Collections.singletonList(organization));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }

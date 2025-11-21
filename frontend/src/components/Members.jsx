@@ -68,6 +68,21 @@ function Members() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Basic frontend validation to align with backend MemberDto rules
+    if (!formData.orgId) {
+      toast.error('Please select an organization');
+      return;
+    }
+    if (!formData.roleId) {
+      toast.error('Please select a role');
+      return;
+    }
+    if (!editingMember && (!formData.password || formData.password.length < 6)) {
+      toast.error('Password must be at least 6 characters');
+      return;
+    }
+
     try {
       const memberData = {
         ...formData,
@@ -88,7 +103,10 @@ function Members() {
       fetchMembers();
     } catch (error) {
       console.error('Error saving member:', error);
-      toast.error('Failed to save member');
+      const backendMessage = typeof error.response?.data === 'string'
+        ? error.response.data
+        : (error.response?.data?.message || 'Failed to save member');
+      toast.error(backendMessage);
     }
   };
 

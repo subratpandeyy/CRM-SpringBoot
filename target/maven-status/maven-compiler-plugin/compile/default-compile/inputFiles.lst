@@ -16,6 +16,7 @@ D:\CRM Test\src\main\java\com\crm\controller\ActivityController.java
 D:\CRM Test\src\main\java\com\crm\entity\Role.java
 D:\CRM Test\src\main\java\com\crm\repository\ActivityRepository.java
 D:\CRM Test\src\main\java\com\crm\repository\MemberRepository.java
+D:\CRM Test\src\main\java\com\crm\controller\RoleAccessController.java
 D:\CRM Test\src\main\java\com\crm\service\LeadService.java
 D:\CRM Test\src\main\java\com\crm\dto\UserResponseDto.java
 D:\CRM Test\src\main\java\com\crm\security\JwtAuthenticationEntryPoint.java

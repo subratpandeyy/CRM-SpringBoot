@@ -134,13 +134,18 @@ public class AuthController {
             orgDto.setOrgEmail(request.getOrgEmail());
             OrganizationDto createdOrg = organizationService.createOrganization(orgDto);
             
-            // Create admin member
+            // Look up the Admin role instead of assuming a fixed ID
+            Long adminRoleId = roleRepository.findByRoleName("Admin")
+                    .orElseThrow(() -> new RuntimeException("Admin role not found. Please ensure roles are initialized."))
+                    .getRoleId();
+            
+            // Create admin member for the new organization
             MemberDto memberDto = new MemberDto();
             memberDto.setName(request.getAdminName());
             memberDto.setEmail(request.getAdminEmail());
             memberDto.setPassword(request.getAdminPassword());
             memberDto.setOrgId(createdOrg.getOrgId());
-            memberDto.setRoleId(1L); // Assuming Admin role has ID 1
+            memberDto.setRoleId(adminRoleId);
             MemberDto createdMember = memberService.createMember(memberDto);
             
             return ResponseEntity.ok("Organization and admin user created successfully");

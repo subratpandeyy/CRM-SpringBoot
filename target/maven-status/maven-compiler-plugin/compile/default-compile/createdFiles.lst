@@ -1,6 +1,7 @@
 com\crm\repository\AccountRepository.class
 com\crm\dto\LoginRequest.class
 com\crm\entity\Organization.class
+com\crm\controller\RoleAccessController.class
 com\crm\controller\RoleController.class
 com\crm\entity\Lead.class
 com\crm\service\AccountService.class

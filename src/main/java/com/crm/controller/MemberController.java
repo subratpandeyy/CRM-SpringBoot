@@ -2,9 +2,13 @@ package com.crm.controller;
 
 import com.crm.dto.MemberDto;
 import com.crm.service.MemberService;
+import com.crm.util.AuthenticationUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,10 +16,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/members")
 @CrossOrigin(origins = "*")
+@PreAuthorize("hasRole('Admin')")
 public class MemberController {
     
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private AuthenticationUtils authenticationUtils;
     
     @PostMapping
     public ResponseEntity<?> createMember(@Valid @RequestBody MemberDto memberDto) {
@@ -28,9 +36,10 @@ public class MemberController {
     }
     
     @GetMapping
-    public ResponseEntity<?> getAllMembers() {
+    public ResponseEntity<?> getMembersForCurrentOrganization(Authentication authentication, HttpServletRequest request) {
         try {
-            List<MemberDto> members = memberService.getAllMembers();
+            Long orgId = authenticationUtils.getOrgIdFromAuthentication(authentication, request);
+            List<MemberDto> members = memberService.getMembersByOrganization(orgId);
             return ResponseEntity.ok(members);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
