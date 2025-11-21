@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, Users, BarChart3, Zap, Shield, TrendingUp, Star, ArrowRight, Menu, X, Play } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import logo from "../assets/logo.png";
 
 const CRMLandingPage = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -14,6 +15,10 @@ const CRMLandingPage = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleTrial = () => {
+    window.location.href = "/register";
+  }
 
   // Sample data for charts
   const revenueData = [
@@ -102,6 +107,7 @@ const CRMLandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
+              <img src={logo} className='h-8 w-8 mr-2' />
               <h1 className="text-2xl font-black text-black">CruxCRM</h1>
             </div>
 
@@ -125,8 +131,7 @@ const CRMLandingPage = () => {
               
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-1 z-10 border border-gray-200">
-                  <a href="#" className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 font-medium">Customer Login</a>
-                  <a href="#" className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 font-medium">Admin Login</a>
+                  <a href="/login" className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 font-medium">Login</a>
                 </div>
               )}
             </div>
@@ -150,8 +155,7 @@ const CRMLandingPage = () => {
               <a href="#pricing" className="block px-3 py-2 text-base font-semibold text-gray-700 hover:text-black">Pricing</a>
               <a href="#contact" className="block px-3 py-2 text-base font-semibold text-gray-700 hover:text-black">Contact</a>
               <div className="border-t border-gray-200 pt-2">
-                <a href="#" className="block px-3 py-2 text-base font-semibold text-gray-700 hover:text-black">Customer Login</a>
-                <a href="#" className="block px-3 py-2 text-base font-semibold text-gray-700 hover:text-black">Admin Login</a>
+                <a href="/login" className="block px-3 py-2 text-base font-semibold text-gray-700 hover:text-black">Customer Login</a>
               </div>
             </div>
           </div>
@@ -171,13 +175,11 @@ const CRMLandingPage = () => {
                 The CRM that grows revenue by 45% while cutting admin time in half.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <button className="bg-black text-white px-8 py-4 rounded-xl font-bold hover:bg-gray-900 transform hover:scale-105 transition-all duration-200 shadow-lg flex items-center justify-center text-lg">
+                <button className="bg-black text-white px-8 py-4 rounded-xl font-bold hover:bg-gray-900 transform hover:scale-105 transition-all duration-200 shadow-lg flex items-center justify-center text-lg"
+                  onClick={handleTrial}
+                >
                   Start Free Trial
                   <ArrowRight className="ml-2 h-5 w-5" />
-                </button>
-                <button className="border-2 border-black text-black px-8 py-4 rounded-xl font-bold hover:bg-black hover:text-white transition-all duration-200 flex items-center justify-center text-lg">
-                  <Play className="mr-2 h-5 w-5" />
-                  Watch Demo
                 </button>
               </div>
               <div className="flex items-center space-x-8">
@@ -418,13 +420,13 @@ const CRMLandingPage = () => {
             Join 10,000+ companies growing with CruxCRM
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="bg-white text-black px-8 py-4 rounded-xl font-black hover:bg-gray-100 transform hover:scale-105 transition-all duration-200 shadow-lg flex items-center text-lg">
+            <button className="bg-white text-black px-8 py-4 rounded-xl font-black hover:bg-gray-100 transform hover:scale-105 transition-all duration-200 shadow-lg flex items-center text-lg"
+              onClick={handleTrial}
+            >
               Start Your Free Trial
               <ArrowRight className="ml-2 h-5 w-5" />
             </button>
-            <button className="border-2 border-white text-white px-8 py-4 rounded-xl font-black hover:bg-white hover:text-black transition-all duration-200 text-lg">
-              Schedule a Demo
-            </button>
+            
           </div>
         </div>
       </section>
