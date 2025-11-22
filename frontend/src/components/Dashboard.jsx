@@ -433,7 +433,7 @@ if (stages.length > 0) {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-[#fff] rounded-2xl p-8 text-white shadow-xl"
+        className="bg-[#fff] rounded-2xl p-8 text-white shadow-md"
       >
         <div className="flex items-center justify-between">
           <div>

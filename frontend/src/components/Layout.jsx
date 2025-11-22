@@ -82,7 +82,7 @@ function Layout({ children }) {
                 }}
                 className={`w-full flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-150 ${
                   isActive(item.href)
-                    ? 'bg-[#fff] text-[#004E92] border-r-2 border-[#4DA3FF] shadow-sm'
+                    ? 'bg-[#fff] text-[#004E92] border-r-4 border-[#4DA3FF] shadow-sm'
                     : 'text-side hover:text-text hover:bg-gray-100'
                 }`}
               >

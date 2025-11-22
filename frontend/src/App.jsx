@@ -13,9 +13,9 @@ import Activities from './components/Activities.jsx';
 import Members from './components/Members.jsx';
 import Organizations from './components/Organizations.jsx';
 import Layout from './components/Layout.jsx';
-import CRMLandingPage from './components/CRMLandingPage.jsx';
 import RbacDashboard from './components/RbacDashboard.jsx';
 import RoleBasedRoute from './components/RoleBasedRoute.jsx';
+import Landing from './components/Landing.jsx';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -57,7 +57,7 @@ function AdminRoute({ children }) {
 const router = createBrowserRouter([
   {
     path: "/home",
-    element: <CRMLandingPage />
+    element: <Landing />
   },
   {
     path: "/login",
