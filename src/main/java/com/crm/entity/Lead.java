@@ -28,7 +28,7 @@ public class Lead {
     @Column(name = "lead_email", nullable = false)
     private String leadEmail;
     
-    @Size(max = 20, message = "Phone must not exceed 20 characters")
+    @Size(max = 10, message = "Phone must not exceed 10 characters")
     @Column(name = "phone")
     private String phone;
     

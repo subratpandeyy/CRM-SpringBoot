@@ -29,7 +29,7 @@ public class Contact {
     @Column(name = "contact_email", nullable = false)
     private String contactEmail;
     
-    @Size(max = 20, message = "Phone must not exceed 20 characters")
+    @Size(max = 10, message = "Phone must not exceed 10 characters")
     @Column(name = "phone")
     private String phone;
     

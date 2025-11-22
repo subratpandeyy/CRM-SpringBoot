@@ -26,6 +26,7 @@ public class Account {
     private String email;
     
     @Column(name = "phone")
+    @Size(max = 10, message = "Phone number must not exceed 10 characters")
     private String phone;
     
     @Column(name = "website")

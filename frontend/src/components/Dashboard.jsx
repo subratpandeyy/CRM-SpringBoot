@@ -430,7 +430,7 @@ if (stages.length > 0) {
   return (
     <div className="space-y-6">
       {/* Welcome Header */}
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="bg-[#fff] rounded-2xl p-8 text-white shadow-md"
@@ -461,7 +461,7 @@ if (stages.length > 0) {
             </div>
           </div>
         </div>
-      </motion.div>
+      </motion.div> */}
 
       {/* Stats Grid */}
       <motion.div
@@ -499,7 +499,7 @@ if (stages.length > 0) {
                       <span className="text-sm text-gray-500 ml-1">from last month</span>
                     </div>
                   </div>
-                  <div className={`p-4 rounded-xl bg-gradient-to-br from-${stat.color}-100 to-${stat.color}-200 shadow-lg`}>
+                  <div className={`p-4 rounded-xl bg-gradient-to-br from-${stat.color}-100 to-${stat.color}-200 shadow-sm`}>
                     <Icon className={`h-6 w-6 text-${stat.color}-600`} />
                   </div>
                 </div>
