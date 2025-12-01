@@ -30,6 +30,7 @@ import {
 } from 'recharts';
 import api from '../services/api.js';
 import toast from 'react-hot-toast';
+import Members from './Members.jsx';
 
 function Dashboard() {
   const { user } = useAuth();
@@ -426,43 +427,10 @@ if (stages.length > 0) {
   // but we can tweak messaging and emphasis by role
   const isManagerOrAdmin = role === 'Admin' || role === 'Manager';
   const isSalesRep = role === 'Sales Rep';
+  const isManager = role === 'Manager';
 
   return (
     <div className="space-y-6">
-      {/* Welcome Header */}
-      {/* <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-[#fff] rounded-2xl p-8 text-white shadow-md"
-      >
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold mb-2 text-[#000]">
-              {role === 'Admin'
-                ? `Admin control center, ${user?.name || ''}`
-                : role === 'Manager'
-                ? `Team performance, ${user?.name || ''}`
-                : `Your sales cockpit, ${user?.name || ''}`}
-            </h1>
-            <p className="text-text text-lg">
-              {role === 'Admin'
-                ? "Monitor your entire organization, users, and settings at a glance"
-                : role === 'Manager'
-                ? "See how your team is performing across leads and deals"
-                : "Track your personal pipeline and activities in one place"}
-            </p>
-          </div>
-          <div className="hidden md:block">
-            <div className="bg-[#004E92] backdrop-blur-sm rounded-xl p-6 border border-primary-300">
-              <div className="text-center">
-                <div className="text-2xl font-bold">{new Date().toLocaleDateString()}</div>
-                <div className="text-primary-100 text-sm">Today</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div> */}
-
       {/* Stats Grid */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
