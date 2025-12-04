@@ -18,7 +18,6 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/api/deals")
 @CrossOrigin(origins = "*")
-@PreAuthorize("hasAnyRole('Admin','Manager','Sales Rep')")
 public class DealController {
     
     @Autowired
@@ -28,6 +27,7 @@ public class DealController {
     private AuthenticationUtils authenticationUtils;
     
     @PostMapping
+    @PreAuthorize("hasAnyRole('Admin','Manager','Sales Rep')")
     public ResponseEntity<?> createDeal(@Valid @RequestBody DealDto dealDto, Authentication authentication, HttpServletRequest request) {
         try {
             // Extract orgId and memberId from JWT token
@@ -45,6 +45,7 @@ public class DealController {
     }
     
     @GetMapping
+    @PreAuthorize("hasAnyRole('Admin','Manager','Sales Rep')")
     public ResponseEntity<?> getDealsByOrganization(Authentication authentication, HttpServletRequest request) {
         try {
             Long orgId = authenticationUtils.getOrgIdFromAuthentication(authentication, request);
@@ -55,7 +56,21 @@ public class DealController {
         }
     }
 
+    @GetMapping("/my")
+    @PreAuthorize("hasAnyRole('Admin','Manager','Sales Rep','User')")
+    public ResponseEntity<?> getDealsForCurrentUser(Authentication authentication, HttpServletRequest request) {
+        try {
+            Long orgId = authenticationUtils.getOrgIdFromAuthentication(authentication, request);
+            Long memberId = authenticationUtils.getMemberIdFromAuthentication(authentication, request);
+            List<DealDto> deals = dealService.getDealsForCurrentUser(orgId, memberId);
+            return ResponseEntity.ok(deals);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/summary")
+    @PreAuthorize("hasAnyRole('Admin','Manager','Sales Rep')")
     public ResponseEntity<?> getDealSummary(Authentication authentication, HttpServletRequest request) {
         try {
             Long orgId = authenticationUtils.getOrgIdFromAuthentication(authentication, request);
@@ -66,6 +81,7 @@ public class DealController {
     }
 
     @GetMapping("/stages")
+    @PreAuthorize("hasAnyRole('Admin','Manager','Sales Rep')")
     public ResponseEntity<?> getDealStageDistribution(Authentication authentication, HttpServletRequest request) {
         try {
             Long orgId = authenticationUtils.getOrgIdFromAuthentication(authentication, request);
@@ -76,6 +92,7 @@ public class DealController {
     }
     
     @GetMapping("/{dealId}")
+    @PreAuthorize("hasAnyRole('Admin','Manager','Sales Rep')")
     public ResponseEntity<?> getDealById(@PathVariable Long dealId) {
         try {
             DealDto deal = dealService.getDealById(dealId);
@@ -86,6 +103,7 @@ public class DealController {
     }
     
     @PutMapping("/{dealId}")
+    @PreAuthorize("hasAnyRole('Admin','Manager','Sales Rep')")
     public ResponseEntity<?> updateDeal(@PathVariable Long dealId, @Valid @RequestBody DealDto dealDto) {
         try {
             DealDto updatedDeal = dealService.updateDeal(dealId, dealDto);
@@ -96,6 +114,7 @@ public class DealController {
     }
     
     @DeleteMapping("/{dealId}")
+    @PreAuthorize("hasAnyRole('Admin','Manager','Sales Rep')")
     public ResponseEntity<?> deleteDeal(@PathVariable Long dealId) {
         try {
             dealService.deleteDeal(dealId);

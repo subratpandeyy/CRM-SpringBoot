@@ -29,6 +29,25 @@ public interface DealRepository extends JpaRepository<Deal, Long> {
 	@Query("SELECT d FROM Deal d LEFT JOIN FETCH d.organization LEFT JOIN FETCH d.member LEFT JOIN FETCH d.account LEFT JOIN FETCH d.contact WHERE d.dealId = :dealId")
 	Deal findByIdWithRelations(@Param("dealId") Long dealId);
 
+	/**
+	 * Deals where the primary contact or account email matches a given email,
+	 * scoped to an organization. This is used to show projects for end users
+	 * based on the email they log in with.
+	 */
+	@Query("SELECT d FROM Deal d " +
+	       "LEFT JOIN FETCH d.organization o " +
+	       "LEFT JOIN FETCH d.member m " +
+	       "LEFT JOIN FETCH d.account a " +
+	       "LEFT JOIN FETCH d.contact c " +
+	       "WHERE o = :organization " +
+	       "AND (" +
+	       "  (c IS NOT NULL AND LOWER(c.contactEmail) = LOWER(:email)) " +
+	       "   OR " +
+	       "  (a IS NOT NULL AND LOWER(a.email) = LOWER(:email))" +
+	       ")")
+	List<Deal> findByOrganizationAndPartyEmail(@Param("organization") Organization organization,
+	                                           @Param("email") String email);
+
 	// Monthly deal summary for charts (year, month, count) per organization
 	@Query("SELECT EXTRACT(YEAR FROM d.createdAt) AS year, EXTRACT(MONTH FROM d.createdAt) AS month, COUNT(d) AS dealCount " +
 	       "FROM Deal d WHERE d.organization = :organization " +

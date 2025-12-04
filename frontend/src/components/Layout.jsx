@@ -22,6 +22,8 @@ function Layout({ children }) {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const isUser = user?.role === 'User';
+
   const handleLogout = () => {
     logout();
     navigate('/login');
@@ -47,9 +49,6 @@ function Layout({ children }) {
 
   const Sidebar = () => (
     <motion.div
-      // initial={{ x: -300 }}
-      // animate={{ x: 0 }}
-      // exit={{ x: 100 }}
       className="fixed inset-y-0 left-0 z-50 w-64 bg-[#004E92] text-text shadow-xl border-r border-borderSubtle lg:static lg:inset-0 lg:z-auto"
     >
       <div className="flex h-full flex-col">
@@ -71,7 +70,8 @@ function Layout({ children }) {
 
         {/* Navigation */}
         <nav className="flex-1 space-y-1 px-4 py-4">
-          {navigation.map((item) => {
+          {/* Full navigation only for internal roles (Admin/Manager/Sales Rep) */}
+          {!isUser && navigation.map((item) => {
             const Icon = item.icon;
             return (
               <button
@@ -82,7 +82,7 @@ function Layout({ children }) {
                 }}
                 className={`w-full flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-150 ${
                   isActive(item.href)
-                    ? 'bg-[#fff] text-[#004E92] border-r-4 border-[#4DA3FF] shadow-sm'
+                    ? 'bg-[#fff] text-[#004E92] border-r-2 border-[#4DA3FF] shadow-sm'
                     : 'text-side hover:text-text hover:bg-gray-100'
                 }`}
               >
@@ -92,7 +92,8 @@ function Layout({ children }) {
             );
           })}
 
-          {user && user.role === 'Admin' && (
+          {/* Admin-only section */}
+          {!isUser && user && user.role === 'Admin' && (
             <div className="pt-4">
               <div className="px-3 py-2 text-xs font-semibold text-side uppercase tracking-wider">
                 Administration
@@ -106,7 +107,7 @@ function Layout({ children }) {
                       navigate(item.href);
                       setSidebarOpen(false);
                     }}
-                className={`w-full flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-150 ${
+                    className={`w-full flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-150 ${
                       isActive(item.href)
                         ? 'bg-[#fff] text-[#004E92] border-r-2 border-[#004E92] shadow-sm'
                         : 'text-side hover:text-text hover:bg-gray-100'
@@ -117,6 +118,29 @@ function Layout({ children }) {
                   </button>
                 );
               })}
+            </div>
+          )}
+
+          {/* Minimal navigation for end-users */}
+          {isUser && (
+            <div className="space-y-1">
+              <div className="px-3 py-2 text-xs font-semibold text-side uppercase tracking-wider">
+                My Space
+              </div>
+              <button
+                onClick={() => {
+                  navigate('/');
+                  setSidebarOpen(false);
+                }}
+                className={`w-full flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-150 ${
+                  isActive('/')
+                    ? 'bg-[#fff] text-[#004E92] border-r-2 border-[#4DA3FF] shadow-sm'
+                    : 'text-side hover:text-text hover:bg-gray-100'
+                }`}
+              >
+                <LayoutDashboard className="mr-3 h-5 w-5" />
+                Overview
+              </button>
             </div>
           )}
         </nav>
@@ -151,14 +175,14 @@ function Layout({ children }) {
 
   return (
     <div className="flex h-screen bg-background">
-      {/* Sidebar */}
+      {/* Sidebar (hidden for User role to keep dashboard clean) */}
       <div className="hidden lg:flex lg:flex-shrink-0">
-        <Sidebar />
+        {!isUser && <Sidebar />}
       </div>
 
-      {/* Mobile sidebar overlay */}
+      {/* Mobile sidebar overlay (only for non-User roles) */}
       <AnimatePresence>
-        {sidebarOpen && (
+        {sidebarOpen && !isUser && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -188,12 +212,42 @@ function Layout({ children }) {
               </button>
               <div className="ml-4 lg:ml-0">
                 <h1 className="text-2xl font-semibold text-text">
-                  {navigation.find(item => isActive(item.href))?.name || 'Dashboard'}
+                  {isUser
+                    ? 'My Dashboard'
+                    : (navigation.find(item => isActive(item.href))?.name || 'Dashboard')}
                 </h1>
               </div>
             </div>
 
-            
+            {/* Top-right user info + logout */}
+            {user && user.role === 'User' && (
+              <div className="flex items-center space-x-3">
+                <div className="hidden sm:flex items-center space-x-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 shadow-sm">
+                    <span className="text-sm font-medium text-text">
+                      {user.name?.charAt(0) || 'U'}
+                    </span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium text-text max-w-[120px] truncate">
+                      {user.name || 'User'}
+                    </span>
+                    {user.orgName && (
+                      <span className="text-xs text-gray-500 max-w-[120px] truncate">
+                        {user.orgName}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-text transition-all duration-150"
+                >
+                  <LogOut className="h-4 w-4 mr-1.5" />
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         </header>
 
