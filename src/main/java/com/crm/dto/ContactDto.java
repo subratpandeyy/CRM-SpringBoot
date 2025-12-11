@@ -21,7 +21,7 @@ public class ContactDto {
     @Size(max = 100, message = "Contact email must not exceed 100 characters")
     private String contactEmail;
     
-    @Size(max = 10, message = "Phone must not exceed 10 characters")
+    @Size(max = 10, min = 10, message = "Phone must not exceed 10 characters")
     private String phone;
     
     private Long orgId;

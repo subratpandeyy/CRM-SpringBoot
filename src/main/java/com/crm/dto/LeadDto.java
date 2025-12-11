@@ -21,7 +21,7 @@ public class LeadDto {
     @Size(max = 100, message = "Lead email must not exceed 100 characters")
     private String leadEmail;
     
-    @Size(max = 10, message = "Phone must not exceed 10 characters")
+    @Size(max = 10, min = 10, message = "Phone must not exceed 10 characters")
     private String phone;
     
     private Boolean isVerified;
