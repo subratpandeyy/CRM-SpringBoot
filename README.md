@@ -2,6 +2,9 @@
 
 A comprehensive multi-tenant CRM system built with Spring Boot (Java) backend and React.js frontend.
 
+
+![Project Screenshot](https://github.com/subratpandeyy/CRM-SpringBoot/blob/main/Home.png)
+
 ## 🏗 Architecture
 
 - **Frontend**: React.js with React Router, Bootstrap
