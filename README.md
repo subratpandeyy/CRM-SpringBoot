@@ -5,7 +5,7 @@ A comprehensive multi-tenant CRM system built with Spring Boot (Java) backend an
 
 ![Project Screenshot](https://github.com/subratpandeyy/CRM-SpringBoot/blob/main/Home.png)
 
-## 🏗 Architecture
+## Architecture
 
 - **Frontend**: React.js with React Router, Bootstrap
 - **Backend**: Spring Boot 3.2.0 with Java 17
@@ -14,7 +14,7 @@ A comprehensive multi-tenant CRM system built with Spring Boot (Java) backend an
 - **Authentication**: JWT (JSON Web Tokens)
 - **Security**: Spring Security with role-based access control
 
-## 📋 Features
+## Features
 
 ### Multi-Tenancy
 - Complete data isolation by Organization
@@ -35,7 +35,7 @@ A comprehensive multi-tenant CRM system built with Spring Boot (Java) backend an
 - **Deals**: Sales opportunities with stages and values
 - **Activities**: Track interactions with leads/contacts
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Java 17 or higher
@@ -83,7 +83,7 @@ npm start
 
 The frontend will start on `http://localhost:3000`
 
-## 🔐 Authentication
+## Authentication
 
 ### Registration
 1. Visit `http://localhost:3000/register`
@@ -95,7 +95,7 @@ The frontend will start on `http://localhost:3000`
 2. Use the admin credentials created during registration
 3. JWT token is automatically stored and used for API calls
 
-## 📊 API Endpoints
+## API Endpoints
 
 ### Authentication
 - `POST /api/auth/register` - Register new organization
@@ -117,7 +117,7 @@ The frontend will start on `http://localhost:3000`
 ### Other Entities
 Similar CRUD endpoints exist for Accounts, Deals, Activities, Members, and Organizations.
 
-## 🏢 Multi-Tenancy Implementation
+## Multi-Tenancy Implementation
 
 ### Backend
 - All entities include `organization` field
@@ -130,7 +130,7 @@ Similar CRUD endpoints exist for Accounts, Deals, Activities, Members, and Organ
 - All API calls automatically include organization context
 - UI shows organization name in navigation
 
-## 🔒 Security Features
+## Security Features
 
 - JWT-based authentication
 - Password encryption with BCrypt
@@ -138,7 +138,7 @@ Similar CRUD endpoints exist for Accounts, Deals, Activities, Members, and Organ
 - CORS configuration for frontend
 - Request/response interceptors for token management
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ├── src/main/java/com/crm/
@@ -160,7 +160,7 @@ Similar CRUD endpoints exist for Accounts, Deals, Activities, Members, and Organ
 └── pom.xml
 ```
 
-## 🧪 Testing
+## Testing
 
 ### Backend Testing
 ```bash
@@ -173,7 +173,7 @@ cd frontend
 npm test
 ```
 
-## 🚀 Deployment
+## Deployment
 
 ### Backend Deployment
 1. Build the JAR file:
@@ -195,7 +195,7 @@ npm run build
 
 2. Serve the build folder with a web server (nginx, Apache, etc.)
 
-## 🔧 Configuration
+## Configuration
 
 ### Database Configuration
 Update `src/main/resources/application.yml`:
@@ -217,7 +217,7 @@ spring:
       expiration: 86400000 # 24 hours
 ```
 
-## 📝 Notes
+## Notes
 
 - The system automatically creates default roles on startup
 - All timestamps are in UTC
@@ -225,7 +225,7 @@ spring:
 - Frontend uses Bootstrap for responsive design
 - API responses include proper error handling
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -233,6 +233,6 @@ spring:
 4. Add tests if applicable
 5. Submit a pull request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License.
